@@ -1,9 +1,11 @@
 package ru.yandex.practicum.filmorate.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.exception.DataBaseException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
+import javax.validation.Valid;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -19,9 +21,9 @@ public class FilmController {
     }
 
     @PostMapping("/films")
-    public Film AddFilm(@RequestBody Film film) throws ValidationException {
+    public Film AddFilm(@Valid @RequestBody Film film) throws ValidationException, DataBaseException {
         if(films.containsValue(film)){
-            log.info("Такой фильм уже существует" + film.getName());
+            throw new DataBaseException("Данный фильм уже есть в базе");
         }else {
             films.put(id,new Film(id, film.getName(), film.getDescription(),film.getReleaseDate(),film.getDuration()));
             ++id;
@@ -30,15 +32,14 @@ public class FilmController {
         return films.get(id-1);
     }
     @PutMapping("/films")
-    public Film UpdateFilm(@RequestBody Film film) throws  ValidationException{
+    public Film UpdateFilm(@Valid @RequestBody Film film) throws  ValidationException,DataBaseException{
         if(films.containsKey(film.getId())){
             films.put(film.getId(),
                     new Film(id, film.getName(), film.getDescription(),film.getReleaseDate(),film.getDuration()));
             log.info("Обновили данные фильма" + film.getName());
             return film;
         }else {
-            log.info("Ошибка обновления фильма - фильм отсутствует" + film.getName());
-            throw new ValidationException("Данный фильм отсутствует в базе");
+            throw new DataBaseException("Данный фильм отсутствует в базе");
         }
     }
 

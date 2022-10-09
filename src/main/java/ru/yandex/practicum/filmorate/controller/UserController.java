@@ -2,9 +2,11 @@ package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import ru.yandex.practicum.filmorate.exception.DataBaseException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;
@@ -21,26 +23,25 @@ public class UserController {
         return users.values();
     }
     @PostMapping("/users")
-    public User AddUser(@RequestBody User user) throws ValidationException{
+    public User AddUser(@Valid @RequestBody User user) throws ValidationException, DataBaseException{
         if(users.containsValue(user)){
-            log.info("Такой пользовтель уже существует" + user.getLogin());
+            throw new DataBaseException("Данный пользователь уже есть в базе");
         }else {
             users.put(id,new User(id,user.getEmail(), user.getLogin(), user.getName(), user.getBirthday()));
             ++id;
-            log.info("Добавлен новый пользователь" + user.getLogin());
+            log.info("Добавлен новый пользователь " + user.getLogin());
         }
         return users.get(id-1);
     }
     @PutMapping("/users")
-    public User UpdateUser(@RequestBody User user) throws ValidationException {
+    public User UpdateUser(@Valid @RequestBody User user) throws ValidationException, DataBaseException {
         if(users.containsKey(user.getId())){
             users.put(user.getId(),
                     new User(user.getId(), user.getEmail(), user.getLogin(), user.getName(), user.getBirthday()));
             log.info("Обновили данные пользователя" + user.getLogin());
             return users.get(id-1);
         }else {
-            log.info("Данный пользовтель отсутствует в базе" + user.getLogin());
-            throw new ValidationException("Данный пользовтель отсутствует в базе");
+            throw new DataBaseException("Данный пользователь отсутствует в базе");
         }
 
     }
