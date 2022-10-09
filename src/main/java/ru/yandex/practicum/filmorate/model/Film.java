@@ -20,7 +20,7 @@ public class Film {
     public Film(int id, String name, String description, LocalDate releaseDate, Integer duration)
             throws ValidationException {
         this.id = id;
-        if(name == null){
+        if(name == null || name.isBlank()){
             throw new ValidationException("Пустое название фильма");
         }else{
             this.name = name;

@@ -31,12 +31,13 @@ public class FilmController {
     }
     @PutMapping("/films")
     public Film UpdateFilm(@RequestBody Film film) throws  ValidationException{
-        if(films.containsValue(film)){
-            films.put(film.getId(),film);
-            log.info("Заменили данные фильма" + film.getName());
+        if(films.containsKey(film.getId())){
+            films.put(film.getId(),
+                    new Film(id, film.getName(), film.getDescription(),film.getReleaseDate(),film.getDuration()));
+            log.info("Обновили данные фильма" + film.getName());
             return film;
         }else {
-            log.info("Такой фильм уже существует" + film.getName());
+            log.info("Ошибка обновления фильма - фильм отсутствует" + film.getName());
             throw new ValidationException("Данный фильм отсутствует в базе");
         }
     }
