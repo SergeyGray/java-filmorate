@@ -1,51 +1,63 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.*;
+import ru.yandex.practicum.filmorate.Service.UserService;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import javax.validation.Valid;
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @RestController
 public class UserController {
 
-    private HashMap<Integer, User> users = new HashMap<Integer, User>();
+    private HashMap<Integer, User> users;
     private int id = 1;
+    private UserStorage userStorage;
+    private UserService userService;
 
+    @Autowired
+    public UserController(UserStorage userStorage, UserService userService) {
+        this.users = new HashMap<>();
+        this.userStorage = userStorage;
+        this.userService = userService;
+    }
+    @GetMapping("/users/{id}")
+    public User getUser(@PathVariable Integer id){
+        return userStorage.getUser(id);
+    }
     @GetMapping("/users")
-    public Collection<User> getAllUsers(){
-        return users.values();
+    public List<User> getAllUsers(){
+        return userStorage.getAllUsers();
     }
     @PostMapping("/users")
-    public User addUser(@Valid @RequestBody User user) throws UsersOnMemoryException {
-        if(users.containsValue(user)){
-            throw new UsersOnMemoryException("Данный пользователь уже присутствует в памяти ");
-        }
-        users.put(id,new User(id,user.getEmail(), user.getLogin(), validationUserName(user), user.getBirthday()));
-        ++id;
-        log.info("Добавлен новый пользователь " + user.getLogin());
-        return users.get(id-1);
+    public User addUser(@Valid @RequestBody User user) {
+        return userStorage.addUser(user);
     }
     @PutMapping("/users")
-    public User updateUser(@Valid @RequestBody User user) throws UsersOnMemoryException {
-        if(users.containsKey(user.getId())){
-            users.put(user.getId(),
-                    new User(user.getId(),user.getEmail(), user.getLogin(), user.getName(), user.getBirthday()));
-            log.info("Обновили данные пользователя" + user.getLogin());
-            return users.get(id-1);
-        }else {
-            throw new UsersOnMemoryException("Данный пользователь отсутствует в памяти");
-        }
+    public User updateUser(@Valid @RequestBody User user) {
+            return userStorage.updateUser(user);
+
     }
-    private String validationUserName(User user){
-        if (user.getName() == null|| user.getName().isBlank()){
-            return user.getLogin();
-        } else{
-            return user.getName();
-        }
+    @PutMapping("/users/{id}/friends/{friendId}")
+    public void addFriend(@PathVariable int id,@PathVariable int friendId) {
+        userService.addFriend(id,friendId);
+    }
+    @DeleteMapping("/users/{id}/friends/{friendId}")
+    public void deleteFriend(@PathVariable int id,@PathVariable int friendId) {
+        userService.deleteFriend(id,friendId);
+    }
+    @GetMapping("/users/{id}/friends")
+    public Set<User> getFriends(@PathVariable int id) {
+        return userService.getFriends(id);
+    }
+    @GetMapping("/users/{id}/friends/common/{otherId}")
+    public Set<User> getCommonFriend(@PathVariable int id,@PathVariable int otherId) {
+        return userService.getCommonFriends(id,otherId);
     }
 }

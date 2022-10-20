@@ -7,6 +7,8 @@ import ru.yandex.practicum.filmorate.Validator.ReleaseNotEarlyFirstFilm;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Data
@@ -23,6 +25,7 @@ public class Film {
     private LocalDate releaseDate;
     @Positive(message = "Продолжительность фильма должа быть более 0")
     private Integer duration;
+    private final Set<Integer> likes= new HashSet<>();
 
 }
 
