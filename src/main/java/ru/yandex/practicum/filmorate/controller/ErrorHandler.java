@@ -17,11 +17,13 @@ public class ErrorHandler {
     public ErrorResponse handleUserOrFilmOnMemoryException(final RuntimeException e){
         return new ErrorResponse("Error",e.getMessage());
     }
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleMethodArgumentNotValidException(final MethodArgumentNotValidException e){
         return new ErrorResponse("Error","Ошибка валидации " + e.getParameter());
     }
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleException(final Throwable e){

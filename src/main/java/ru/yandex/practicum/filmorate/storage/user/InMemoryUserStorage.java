@@ -17,7 +17,7 @@ public class InMemoryUserStorage implements UserStorage {
     private int id;
 
     public InMemoryUserStorage() {
-        users = new HashMap<Integer, User>();
+        users = new HashMap<>();
         id = 1;
     }
 
@@ -28,6 +28,7 @@ public class InMemoryUserStorage implements UserStorage {
         }
         return users.get(id);
     }
+
     @Override
     public List<User> getAllUsers() {
         return users.values().stream().collect(Collectors.toList());
@@ -65,6 +66,7 @@ public class InMemoryUserStorage implements UserStorage {
         throw new UsersOnMemoryException(String.format("Пользователь %s отсутствует в памяти",user.getLogin()));
     }
     }
+
     private String validationUserName(User user){
         if (user.getName() == null|| user.getName().isBlank()){
             return user.getLogin();

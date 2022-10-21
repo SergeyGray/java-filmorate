@@ -1,7 +1,7 @@
-package ru.yandex.practicum.filmorate.Service;
+package ru.yandex.practicum.filmorate.service;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.UsersOnMemoryException;
 import ru.yandex.practicum.filmorate.model.User;
@@ -13,14 +13,10 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@AllArgsConstructor
 public class UserService {
 
     private UserStorage userStorage;
-
-    @Autowired
-    public UserService(UserStorage userStorage) {
-        this.userStorage = userStorage;
-    }
 
     public void addFriend(int id, int friendId){
         User user = userStorage.getUser(id);
@@ -47,6 +43,7 @@ public class UserService {
         log.info("У пользвателя {} удален из друзей пользователь {}",
                 user.getLogin(),friend.getLogin());
     }
+
     public Set<User> getFriends(int id){
         return new HashSet<>(userStorage.getAllUsers()
                 .stream()
