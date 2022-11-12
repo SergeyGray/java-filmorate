@@ -3,10 +3,12 @@ package ru.yandex.practicum.filmorate.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import ru.yandex.practicum.filmorate.Validator.ReleaseNotEarlyFirstFilm;
+import ru.yandex.practicum.filmorate.validator.ReleaseNotEarlyFirstFilm;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Data
@@ -23,6 +25,7 @@ public class Film {
     private LocalDate releaseDate;
     @Positive(message = "Продолжительность фильма должа быть более 0")
     private Integer duration;
+    private final Set<Integer> likes= new HashSet<>();
 
 }
 

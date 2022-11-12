@@ -1,45 +1,53 @@
 package ru.yandex.practicum.filmorate.controller;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.FilmsOnMemoryException;
+import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Slf4j
 @RestController
+@AllArgsConstructor
 public class FilmController {
 
-    private HashMap <Integer,Film> films = new HashMap<>();
-    private int id = 1;
+    FilmService filmService;
 
     @GetMapping("/films")
     public List<Film> getAllFilms(){
-        return films.values().stream().collect(Collectors.toList());
+        return filmService.getAllFilms();
+    }
+
+    @GetMapping("/films/{id}")
+    public Film getFilm(@PathVariable int id){
+        return filmService.getFilm(id);
     }
 
     @PostMapping("/films")
-    public Film addFilm(@Valid @RequestBody Film film) throws FilmsOnMemoryException {
-        if(films.containsValue(film)){
-            throw new FilmsOnMemoryException("Данный фильм уже есть в памяти");
-        }
-        films.put(id,new Film(id, film.getName(), film.getDescription(),film.getReleaseDate(),film.getDuration()));
-        ++id;
-        log.info("Добавили новый фильм" + film.getName());
-        return films.get(id-1);
+    public Film addFilm(@Valid @RequestBody Film film) {
+        return filmService.addFilm(film);
     }
+
     @PutMapping("/films")
-    public Film updateFilm(@Valid @RequestBody Film film) throws FilmsOnMemoryException {
-        if(films.containsKey(film.getId())){
-            films.put(film.getId(),
-                    new Film(film.getId(), film.getName(), film.getDescription(),film.getReleaseDate(),film.getDuration()));
-            log.info("Обновили данные фильма" + film.getName());
-            return film;
-        }else {
-            throw new FilmsOnMemoryException("Данный фильм отсутствует в памяти");
-        }
+    public Film updateFilm(@Valid @RequestBody Film film)  {
+        return filmService.updateFilm(film);
+    }
+
+    @PutMapping("/films/{id}/like/{userId}")
+    public void addLike( @PathVariable int id , @PathVariable Integer userId)  {
+        filmService.addLike(id,userId);
+    }
+
+    @DeleteMapping("/films/{id}/like/{userId}")
+    public void deleteLike( @PathVariable Integer id , @PathVariable Integer userId)  {
+        filmService.deleteLike(id,userId);
+    }
+
+    @GetMapping("/films/popular")
+    public List<Film> getPopularFilms( @RequestParam(required = false) Optional<Integer> count)  {
+        return filmService.popularFilms(count.orElse(10));
     }
 }
