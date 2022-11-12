@@ -1,7 +1,3 @@
 # java-filmorate
 
-Cхема диаграммы базы данных проекта:
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="/src/main/resources/static/Filmorate.png">
-</picture>
+![Cхема диаграммы базы данных проекта](https://github.com/SergeyGray/java-filmorate/blob/add-friends-likes/src/main/resources/static/Filmorate.png)
