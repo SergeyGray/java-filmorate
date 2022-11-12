@@ -8,6 +8,7 @@ import ru.yandex.practicum.filmorate.validator.ReleaseNotEarlyFirstFilm;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -22,6 +23,8 @@ public class Film {
     @Size(max =200, message = "Длина описания не может быть более 200 символов")
     private String description;
     @ReleaseNotEarlyFirstFilm
+    private List<Genre> genre;
+    private Mpa mpa;
     private LocalDate releaseDate;
     @Positive(message = "Продолжительность фильма должа быть более 0")
     private Integer duration;
