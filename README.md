@@ -1,5 +1,7 @@
 # java-filmorate
 
-Ссылка на схему диаграммы базы данных проекта:
+Cхема диаграммы базы данных проекта:
 
-\src\main\resources\static\Filmorate.png
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="/src/main/resources/static/Filmorate.png">
+</picture>
