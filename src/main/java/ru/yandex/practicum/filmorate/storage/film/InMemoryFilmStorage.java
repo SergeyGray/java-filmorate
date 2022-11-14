@@ -36,25 +36,27 @@ public class InMemoryFilmStorage implements FilmStorage{
 
     @Override
     public Film addFilm(Film film) {
-        if(films.containsValue(film)){
-            throw new FilmsOnMemoryException(String.format("Фильм %s уже есть в памяти",film.getName()));
-        }
-        films.put(id,new Film(id, film.getName(), film.getDescription(),film.getReleaseDate(),film.getDuration()));
-        ++id;
-        log.info("Добавили новый фильм: {}",film.getName());
-        return films.get(id-1);
+//        if(films.containsValue(film)){
+//            throw new FilmsOnMemoryException(String.format("Фильм %s уже есть в памяти",film.getName()));
+//        }
+//        films.put(id,new Film(id, film.getName(), film.getDescription(),film.getMpa().getId(),film.getReleaseDate(),film.getDuration()));
+//        ++id;
+//        log.info("Добавили новый фильм: {}",film.getName());
+//        return films.get(id-1);
+        return null;
     }
 
     @Override
     public Film updateFilm(Film film) {
-        if(films.containsKey(film.getId())){
-            films.put(film.getId(),
-                    new Film(film.getId(), film.getName(), film.getDescription(),film.getReleaseDate(),film.getDuration()));
-            log.info("Обновили данные фильма: {}",film.getName());
-            return film;
-        }else {
-            throw new FilmsOnMemoryException(String.format("Фильм %s отсутствует в памяти",film.getName()));
-        }
+//        if(films.containsKey(film.getId())){
+//            films.put(film.getId(),
+//       //             new Film(film.getId(), film.getName(), film.getDescription(),film.getGenre(),film.getMpa(),film.getReleaseDate(),film.getDuration()));
+//            log.info("Обновили данные фильма: {}",film.getName());
+//            return film;
+//        }else {
+//            throw new FilmsOnMemoryException(String.format("Фильм %s отсутствует в памяти",film.getName()));
+//        }
+        return null;
     }
 
     @Override

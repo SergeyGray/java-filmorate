@@ -5,14 +5,14 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.yandex.practicum.filmorate.exception.FilmsOnMemoryException;
-import ru.yandex.practicum.filmorate.exception.UsersOnMemoryException;
+import ru.yandex.practicum.filmorate.exception.*;
 import ru.yandex.practicum.filmorate.model.ErrorResponse;
 
 @RestControllerAdvice
 public class ErrorHandler {
 
-    @ExceptionHandler({UsersOnMemoryException.class, FilmsOnMemoryException.class})
+    @ExceptionHandler({UsersOnDataBaseException.class, FilmsOnDataBaseException.class, LikeOnDataBaseException.class
+    ,MpaOnDataBaseException.class, GenreOnDataBaseException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleUserOrFilmOnMemoryException(final RuntimeException e){
         return new ErrorResponse("Error",e.getMessage());

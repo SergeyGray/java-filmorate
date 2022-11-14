@@ -1,8 +1,7 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 import ru.yandex.practicum.filmorate.validator.LoginWithoutSpace;
 
 import javax.validation.constraints.Email;
@@ -13,11 +12,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
-@Slf4j
-@AllArgsConstructor
+@Builder
 public class User {
 
-   transient private final int id;
+   private int id;
    @Email (message = "Неккоректный email")
    @NotBlank (message = "Email не может быть пустым")
     private String email;

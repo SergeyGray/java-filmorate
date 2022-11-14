@@ -39,7 +39,7 @@ public class InMemoryUserStorage implements UserStorage {
         if(users.containsValue(user)){
             throw new UsersOnMemoryException(String.format("Пользователь %s уже присутствует в памяти",user.getLogin()));
         }
-        users.put(id,new User(id,user.getEmail(), user.getLogin(), validationUserName(user), user.getBirthday()));
+     //   users.put(id,new User(id,user.getEmail(), user.getLogin(), validationUserName(user), user.getBirthday()));
         ++id;
         log.info("Добавлен новый пользователь: {}",user.getLogin());
         return users.get(id-1);
@@ -48,9 +48,9 @@ public class InMemoryUserStorage implements UserStorage {
     @Override
     public User updateUser(User user) {
         if(users.containsKey(user.getId())){
-            users.put(user.getId(),
-            new User(user.getId(),user.getEmail(), user.getLogin(), user.getName(), user.getBirthday()));
-            log.info("Обновили данные для пользователя: {}", user.getLogin());
+         //   users.put(user.getId(),
+           // new User(user.getId(),user.getEmail(), user.getLogin(), user.getName(), user.getBirthday()));
+         //   log.info("Обновили данные для пользователя: {}", user.getLogin());
             return users.get(id-1);
         }else {
             throw new UsersOnMemoryException(String.format("Пользователь %s отсутствует в памяти",user.getLogin()));
