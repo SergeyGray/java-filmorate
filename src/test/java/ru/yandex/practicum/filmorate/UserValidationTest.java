@@ -17,8 +17,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class UserValidationTest {
     private static ValidatorFactory validatorFactory;
     private static Validator validator;
-    private User user = new User(1,"test@Mail.ru","testLogin","testName", LocalDate.now());;
-
+    private User user = User.builder()
+            .id(1)
+            .email("test@Mail.ru")
+            .login("testLogin")
+            .name("testName")
+            .birthday(LocalDate.now())
+            .build();
     @BeforeClass
     public static void createValidator() {
         validatorFactory = Validation.buildDefaultValidatorFactory();

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.UsersOnMemoryException;
 import ru.yandex.practicum.filmorate.model.User;
 
-import java.util.HashMap;;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,8 +23,8 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public User getUser(int id) {
-        if(!users.containsKey(id)){
-            throw new UsersOnMemoryException(String.format(" Пользователь с id %s отсутствует в памяти",id));
+        if (!users.containsKey(id)) {
+            throw new UsersOnMemoryException(String.format(" Пользователь с id %s отсутствует в памяти", id));
         }
         return users.get(id);
     }
@@ -36,41 +36,52 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public User addUser(User user) {
-        if(users.containsValue(user)){
-            throw new UsersOnMemoryException(String.format("Пользователь %s уже присутствует в памяти",user.getLogin()));
+        if (users.containsValue(user)) {
+            throw new UsersOnMemoryException(String.format("Пользователь %s уже присутствует в памяти", user.getLogin()));
         }
-        users.put(id,new User(id,user.getEmail(), user.getLogin(), validationUserName(user), user.getBirthday()));
+        users.put(id, User.builder()
+                .id(id)
+                .email(user.getEmail())
+                .login(user.getEmail())
+                .name(user.getName())
+                .birthday(user.getBirthday())
+                .build());
         ++id;
-        log.info("Добавлен новый пользователь: {}",user.getLogin());
-        return users.get(id-1);
+        log.info("Добавлен новый пользователь: {}", user.getLogin());
+        return users.get(id - 1);
     }
 
     @Override
     public User updateUser(User user) {
-        if(users.containsKey(user.getId())){
-            users.put(user.getId(),
-            new User(user.getId(),user.getEmail(), user.getLogin(), user.getName(), user.getBirthday()));
+        if (users.containsKey(user.getId())) {
+            users.put(user.getId(), User.builder()
+                    .id(id)
+                    .email(user.getEmail())
+                    .login(user.getEmail())
+                    .name(user.getName())
+                    .birthday(user.getBirthday())
+                    .build());
             log.info("Обновили данные для пользователя: {}", user.getLogin());
-            return users.get(id-1);
-        }else {
-            throw new UsersOnMemoryException(String.format("Пользователь %s отсутствует в памяти",user.getLogin()));
+            return users.get(id - 1);
+        } else {
+            throw new UsersOnMemoryException(String.format("Пользователь %s отсутствует в памяти", user.getLogin()));
         }
     }
 
     @Override
     public void deleteUser(User user) {
-    if(users.containsKey(user.getId())){
-        users.remove(user);
-        log.info("Удалили пользователя из памяти: {}", user.getName());
-    }else{
-        throw new UsersOnMemoryException(String.format("Пользователь %s отсутствует в памяти",user.getLogin()));
-    }
+        if (users.containsKey(user.getId())) {
+            users.remove(user);
+            log.info("Удалили пользователя из памяти: {}", user.getName());
+        } else {
+            throw new UsersOnMemoryException(String.format("Пользователь %s отсутствует в памяти", user.getLogin()));
+        }
     }
 
-    private String validationUserName(User user){
-        if (user.getName() == null|| user.getName().isBlank()){
+    private String validationUserName(User user) {
+        if (user.getName() == null || user.getName().isBlank()) {
             return user.getLogin();
-        } else{
+        } else {
             return user.getName();
         }
     }

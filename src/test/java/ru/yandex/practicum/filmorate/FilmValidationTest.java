@@ -18,8 +18,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class FilmValidationTest {
     private static ValidatorFactory validatorFactory;
     private static Validator validator;
-    private Film film = new Film(1,"testName","testDescription",
-            LocalDate.of(2020,10,10),100);
+    private Film film = Film.builder()
+            .id(1)
+            .name("testName")
+            .description("testDescription")
+            .releaseDate(LocalDate.of(2020,10,10))
+            .duration(100)
+            .build();
 
     @BeforeClass
     public static void createValidator() {
