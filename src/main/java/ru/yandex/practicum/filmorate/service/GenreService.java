@@ -15,18 +15,19 @@ public class GenreService {
     private final GenreDbStorage genreDbStorage;
 
 
-    public Genre getGenre(int id){
+    public Genre getGenre(int id) {
         Genre genre = genreDbStorage.getGenre(id);
-        log.info("Найден жанр с id {}",id);
+        log.info("Найден жанр с id {}", id);
         return genre;
     }
 
-    public List<Genre> getAllGenre(){
+    public List<Genre> getAllGenre() {
         List<Genre> allGenres = genreDbStorage.getAllGenres();
         log.info("Получены все жанры");
         return allGenres;
     }
-    public List<Genre> getGenresForFilms(int id){
+
+    public List<Genre> getGenresForFilms(int id) {
         List<Genre> allGenresForFilms = genreDbStorage.getGenresForFilms(id);
         log.info("Получены все жанры для фильма с id {}", id);
         return allGenresForFilms;

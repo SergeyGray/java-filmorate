@@ -14,13 +14,14 @@ import java.util.List;
 @Service
 public class UserService {
 
-    private UserStorage userStorage;
+    private final UserStorage userStorage;
+    @Autowired
+    private FriendDbStorage friendDbStorage;
+
     @Autowired
     public UserService(@Qualifier("userDbStorage") UserStorage userStorage) {
         this.userStorage = userStorage;
     }
-    @Autowired
-    private FriendDbStorage friendDbStorage;
 
     public List<User> getAllUsers() {
         return userStorage.getAllUsers();
@@ -38,15 +39,15 @@ public class UserService {
         return userStorage.updateUser(user);
     }
 
-    public void addFriend(int id, int friendId){
-        friendDbStorage.addFriend(id,friendId);
+    public void addFriend(int id, int friendId) {
+        friendDbStorage.addFriend(id, friendId);
     }
 
-    public void deleteFriend(int id,int friendId){
-        friendDbStorage.deleteFriend(id,friendId);
+    public void deleteFriend(int id, int friendId) {
+        friendDbStorage.deleteFriend(id, friendId);
     }
 
-    public List<User> getFriends(int id){
+    public List<User> getFriends(int id) {
         return friendDbStorage.getFriends(id);
     }
 

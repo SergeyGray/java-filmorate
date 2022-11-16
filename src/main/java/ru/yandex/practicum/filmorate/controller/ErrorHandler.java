@@ -12,21 +12,21 @@ import ru.yandex.practicum.filmorate.model.ErrorResponse;
 public class ErrorHandler {
 
     @ExceptionHandler({UsersOnDataBaseException.class, FilmsOnDataBaseException.class, LikeOnDataBaseException.class
-    ,MpaOnDataBaseException.class, GenreOnDataBaseException.class})
+            , MpaOnDataBaseException.class, GenreOnDataBaseException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleUserOrFilmOnMemoryException(final RuntimeException e){
-        return new ErrorResponse("Error",e.getMessage());
+    public ErrorResponse handleUserOrFilmOnMemoryException(final RuntimeException e) {
+        return new ErrorResponse("Error", e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleMethodArgumentNotValidException(final MethodArgumentNotValidException e){
-        return new ErrorResponse("Error","Ошибка валидации " + e.getParameter());
+    public ErrorResponse handleMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
+        return new ErrorResponse("Error", "Ошибка валидации " + e.getParameter());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleException(final Throwable e){
-        return new ErrorResponse("Error","Внутреняя ошибка сервера");
+    public ErrorResponse handleException(final Throwable e) {
+        return new ErrorResponse("Error", "Внутреняя ошибка сервера");
     }
 }

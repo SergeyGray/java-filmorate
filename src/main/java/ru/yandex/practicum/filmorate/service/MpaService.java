@@ -14,13 +14,13 @@ import java.util.List;
 public class MpaService {
     private final MpaDbStorage mpaDbStorage;
 
-    public Mpa getMpa(int id){
+    public Mpa getMpa(int id) {
         Mpa mpa = mpaDbStorage.getMpa(id);
-        log.info("Найден Mpa с id {}",id);
+        log.info("Найден Mpa с id {}", id);
         return mpa;
     }
 
-    public List<Mpa> getAllMpa(){
+    public List<Mpa> getAllMpa() {
         List<Mpa> allMpa = mpaDbStorage.getAllMpa();
         log.info("Получены все Mpa");
         return allMpa;

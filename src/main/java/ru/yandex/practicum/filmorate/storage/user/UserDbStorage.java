@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
-import ru.yandex.practicum.filmorate.exception.UsersOnDataBaseException;;
+import ru.yandex.practicum.filmorate.exception.UsersOnDataBaseException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.ArrayList;
@@ -14,16 +14,16 @@ import java.util.List;
 @Slf4j
 @Component
 @AllArgsConstructor
-public class UserDbStorage implements UserStorage{
+public class UserDbStorage implements UserStorage {
     private final JdbcTemplate jdbcTemplate;
 
     @Override
     public User getUser(int id) {
         SqlRowSet userRows = jdbcTemplate.queryForRowSet("select * from users where id = ?", id);
-        if(userRows.next()) {
+        if (userRows.next()) {
             return createUserFromSql(userRows);
         } else
-            throw new UsersOnDataBaseException(String.format(" Пользователь с id %s отсутствует в базе данных",id));
+            throw new UsersOnDataBaseException(String.format(" Пользователь с id %s отсутствует в базе данных", id));
     }
 
     @Override
@@ -40,17 +40,17 @@ public class UserDbStorage implements UserStorage{
     public User addUser(User user) {
         String sqlQuery = "INSERT INTO users (email, login, name, birthday) " +
                 "VALUES (?, ?, ?, ?)";
-        int result = jdbcTemplate.update(sqlQuery,user.getEmail(),user.getLogin(),validationUserName(user),user.getBirthday());
-        if(result >0){
-            log.info("Добавлен новый пользователь: {}",user.getLogin());
+        int result = jdbcTemplate.update(sqlQuery, user.getEmail(), user.getLogin(), validationUserName(user), user.getBirthday());
+        if (result > 0) {
+            log.info("Добавлен новый пользователь: {}", user.getLogin());
             SqlRowSet userRows = jdbcTemplate.queryForRowSet("SELECT id FROM users ORDER BY id desc LIMIT 1;");
-           if(userRows.next()) {
-               user.setId(userRows.getInt("id"));
-           }
+            if (userRows.next()) {
+                user.setId(userRows.getInt("id"));
+            }
             return user;
-        }else
+        } else
             throw new UsersOnDataBaseException(String.format(
-                    "Не удалось добавить пользователя %s в базу данных",user.getLogin()));
+                    "Не удалось добавить пользователя %s в базу данных", user.getLogin()));
     }
 
     @Override
@@ -64,32 +64,33 @@ public class UserDbStorage implements UserStorage{
                 validationUserName(user),
                 user.getBirthday(),
                 user.getId());
-        if(result > 0){
-            log.info("Данные пользователя {} обновлены",user.getLogin());
+        if (result > 0) {
+            log.info("Данные пользователя {} обновлены", user.getLogin());
             return user;
-        }else {
+        } else {
             throw new UsersOnDataBaseException(String.format(
-                    "Не удалось обновить данные пользователя %s в базе данных",user.getLogin()));
+                    "Не удалось обновить данные пользователя %s в базе данных", user.getLogin()));
         }
     }
 
     @Override
     public void deleteUser(User user) {
-        int result = jdbcTemplate.update("DELETE FROM users WHERE  id = ?",user.getId());
-        if(result > 0){
+        int result = jdbcTemplate.update("DELETE FROM users WHERE  id = ?", user.getId());
+        if (result > 0) {
             log.info("Удалили пользователя из базы данных: {}", user.getName());
-        }else{
-            throw new UsersOnDataBaseException(String.format("Пользователь %s отсутствует в базе данных",user.getLogin()));
+        } else {
+            throw new UsersOnDataBaseException(String.format("Пользователь %s отсутствует в базе данных", user.getLogin()));
         }
     }
 
-    private String validationUserName(User user){
-        if (user.getName() == null|| user.getName().isBlank()){
+    private String validationUserName(User user) {
+        if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
         }
         return user.getName();
     }
-    private User createUserFromSql(SqlRowSet userRows){
+
+    private User createUserFromSql(SqlRowSet userRows) {
         return User.builder()
                 .id(userRows.getInt("id"))
                 .email(userRows.getString("email"))

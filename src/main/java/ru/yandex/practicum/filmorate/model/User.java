@@ -15,16 +15,16 @@ import java.util.Set;
 @Builder
 public class User {
 
-   private int id;
-   @Email (message = "Неккоректный email")
-   @NotBlank (message = "Email не может быть пустым")
+    private final Set<Integer> friends = new HashSet();
+    private int id;
+    @Email(message = "Неккоректный email")
+    @NotBlank(message = "Email не может быть пустым")
     private String email;
-   @NotBlank (message =  "Логин не может быть пустым")
-   @LoginWithoutSpace
+    @NotBlank(message = "Логин не может быть пустым")
+    @LoginWithoutSpace
     private String login;
     private String name;
-    @PastOrPresent (message = "Дата рождения не может быть в будушем")
+    @PastOrPresent(message = "Дата рождения не может быть в будушем")
     private LocalDate birthday;
-    final private Set<Integer> friends = new HashSet();
 }
 
